@@ -12,19 +12,19 @@
 
         /* Desktop */
         .desktop { flex: 1; position: relative; padding: 20px; display: flex; flex-direction: column; gap: 15px; align-items: flex-start; flex-wrap: wrap; height: calc(100vh - 50px); align-content: flex-start; }
-        .desktop-icon { display: flex; flex-direction: column; align-items: center; width: 80px; cursor: pointer; padding: 10px; border-radius: 5px; transition: 0.1s; }
+        .desktop-icon { display: flex; flex-direction: column; align-items: center; width: 85px; cursor: pointer; padding: 10px; border-radius: 5px; transition: 0.1s; }
         .desktop-icon:hover { background: rgba(255,255,255,0.1); }
-        .desktop-icon img { width: 45px; height: 45px; margin-bottom: 5px; object-fit: contain; }
-        .desktop-icon span { font-size: 12px; color: white; text-shadow: 1px 1px 2px black; text-align: center; }
+        .desktop-icon img { width: 45px; height: 45px; margin-bottom: 8px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+        .desktop-icon span { font-size: 12px; color: white; text-shadow: 1px 1px 3px black; text-align: center; font-weight: 500; }
 
         /* Windows */
-        .window { position: absolute; top: 10%; left: 20%; width: 600px; height: 400px; background: #202020; border: 1px solid #444; border-radius: 8px; display: none; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 100; overflow: hidden; }
+        .window { position: absolute; top: 10%; left: 20%; width: 600px; height: 400px; background: #202020; border: 1px solid #444; border-radius: 8px; display: none; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 100; overflow: hidden; }
         .window.active { display: flex; }
         .window.maximized { top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; border-radius: 0; z-index: 9999 !important; }
         .window-header { height: 35px; background: #2d2d2d; display: flex; justify-content: space-between; align-items: center; padding: 0 10px; cursor: move; }
-        .window-title { color: white; font-size: 12px; display: flex; align-items: center; gap: 8px; }
-        .window-controls { display: flex; }
-        .win-btn { width: 45px; height: 35px; border: none; background: transparent; color: white; cursor: pointer; font-size: 12px; display: flex; justify-content: center; align-items: center; }
+        .window-title { color: white; font-size: 12px; display: flex; align-items: center; gap: 8px; pointer-events: none; }
+        .window-controls { display: flex; z-index: 10; }
+        .win-btn { width: 45px; height: 35px; border: none; background: transparent; color: white; cursor: pointer; font-size: 12px; display: flex; justify-content: center; align-items: center; transition: 0.1s; }
         .win-btn:hover { background: #444; }
         .win-btn.close:hover { background: #e81123; }
         .window-content { flex: 1; background: #1e1e1e; color: white; overflow: auto; position: relative; }
@@ -52,23 +52,29 @@
         .term-input-line span { color: #00ff00; }
         .term-input-line input { flex: 1; background: transparent; border: none; color: #00ff00; font-family: 'JetBrains Mono', monospace; outline: none; }
 
-        /* Search Proxy */
-        .proxy-search { width: 100%; height: 100%; display: flex; flex-direction: column; background: #fff; }
-        .proxy-search iframe { flex: 1; border: none; }
-
-        /* App Store */
+        /* App Content */
+        .proxy-search iframe { width: 100%; height: 100%; border: none; }
+        
         .app-store { padding: 20px; }
         .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; }
-        .store-app { background: #333; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; transition: 0.2s; }
-        .store-app:hover { background: #444; }
+        .store-app { background: #333; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; text-align: center; transition: 0.2s; }
         .store-app img { width: 50px; height: 50px; border-radius: 10px; margin-bottom: 10px; }
         .store-app button { margin-top: 10px; padding: 5px 15px; border-radius: 15px; border: none; background: #0078D7; color: white; font-weight: bold; cursor: pointer; }
 
-        /* Games */
         .games-app { padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .game-card { background: #222; border-radius: 10px; overflow: hidden; cursor: pointer; text-align: center; border: 1px solid #333; }
         .game-card img { width: 100%; height: 120px; object-fit: cover; }
         .game-card p { padding: 10px; color: white; font-weight: bold; }
+
+        /* Settings */
+        .settings-app { display: flex; height: 100%; }
+        .settings-nav { width: 150px; background: #252526; padding: 15px 0; }
+        .settings-nav div { padding: 10px 20px; color: #aaa; cursor: pointer; font-size: 13px; }
+        .settings-nav div:hover, .settings-nav div.active { background: #333; color: white; border-left: 3px solid #0078D7; }
+        .settings-content { flex: 1; padding: 20px; }
+        .wallpaper-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
+        .wallpaper-grid div { height: 80px; background-size: cover; background-position: center; border-radius: 5px; cursor: pointer; border: 2px solid transparent; }
+        .wallpaper-grid div:hover { border-color: #0078D7; }
 
         /* VS Code */
         .vscode { display: flex; height: 100%; background: #1e1e1e; }
@@ -78,34 +84,34 @@
         .vs-tabs { background: #2d2d2d; display: flex; }
         .vs-tab { padding: 10px 20px; background: #1e1e1e; color: white; font-size: 12px; border-right: 1px solid #333; }
         .vs-code { flex: 1; padding: 10px; background: #1e1e1e; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; outline: none; resize: none; border: none; font-size: 14px; line-height: 1.5; }
+        
+        /* Dynamic App Window */
+        .dynamic-iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
     <div class="desktop" id="desktop">
-        <!-- Apps -->
         <div class="desktop-icon" ondblclick="openApp('terminal')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Windows_Terminal_Logo.png/512px-Windows_Terminal_Logo.png">
-            <span>Terminal</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/919/919831.png"><span>Terminal</span>
         </div>
         <div class="desktop-icon" ondblclick="openApp('store')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Microsoft_Store_icon.svg/512px-Microsoft_Store_icon.svg.png">
-            <span>App Store</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png"><span>App Store</span>
         </div>
         <div class="desktop-icon" ondblclick="openApp('search')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Google_Chrome_logo_%282019%29.svg/512px-Google_Chrome_logo_%282019%29.svg.png">
-            <span>Browser Proxy</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/888/888846.png"><span>Browser</span>
         </div>
         <div class="desktop-icon" ondblclick="openApp('vscode')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/512px-Visual_Studio_Code_1.35_icon.svg.png">
-            <span>VS Code</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/906/906324.png"><span>VS Code</span>
+        </div>
+        <div class="desktop-icon" ondblclick="openApp('games')">
+            <img src="https://cdn-icons-png.flaticon.com/512/686/686589.png"><span>Games</span>
         </div>
         <div class="desktop-icon" ondblclick="openApp('settings')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Windows_Settings_icon.svg/512px-Windows_Settings_icon.svg.png">
-            <span>Settings</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/2099/2099083.png"><span>Settings</span>
         </div>
 
-        <!-- Terminal -->
+        <!-- Windows -->
         <div class="window" id="win-terminal" style="width: 600px; height: 400px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-terminal')">
                 <div class="window-title"><i class="fas fa-terminal"></i> Command Prompt</div>
@@ -116,7 +122,7 @@
                 </div>
             </div>
             <div class="window-content terminal">
-                <div class="term-output" id="term-output">GhostOS [Version 3.0.1]<br>(c) Ghost Corporation. All rights reserved.<br><br>Type "help" for a list of commands.</div>
+                <div class="term-output" id="term-output">GhostOS [Version 3.0.1]<br>(c) Ghost Corporation. All rights reserved.<br>Type "help" for a list of commands.</div>
                 <div class="term-input-line">
                     <span>C:\Users\Chief></span>
                     <input type="text" id="term-input" onkeypress="handleTerm(event)">
@@ -124,7 +130,6 @@
             </div>
         </div>
 
-        <!-- App Store -->
         <div class="window" id="win-store" style="width: 600px; height: 450px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-store')">
                 <div class="window-title"><i class="fas fa-store"></i> App Store</div>
@@ -136,13 +141,10 @@
             </div>
             <div class="window-content app-store">
                 <h2>Featured Apps</h2>
-                <div class="store-grid" id="store-grid">
-                    <!-- Apps injected via JS -->
-                </div>
+                <div class="store-grid" id="store-grid"></div>
             </div>
         </div>
 
-        <!-- Browser Proxy -->
         <div class="window" id="win-search" style="width: 800px; height: 500px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-search')">
                 <div class="window-title"><i class="fas fa-globe"></i> Proxy Browser</div>
@@ -153,11 +155,10 @@
                 </div>
             </div>
             <div class="window-content proxy-search">
-                <iframe src="https://lite.duckduckgo.com/lite/" allowfullscreen></iframe>
+                <iframe src="https://search.marginalia.nu/" allowfullscreen></iframe>
             </div>
         </div>
 
-        <!-- Games -->
         <div class="window" id="win-games" style="width: 700px; height: 500px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-games')">
                 <div class="window-title"><i class="fas fa-gamepad"></i> Games Hub</div>
@@ -169,15 +170,29 @@
             </div>
             <div class="window-content">
                 <div class="games-app">
-                    <div class="game-card" onclick="window.open('https://www.crazygames.com/game/retro-bowl', '_blank')"><img src="https://imgs.crazygames.com/retro-bowl_16x9/20220106142828/retro-bowl_16x9-cover"><p>Retro Bowl</p></div>
-                    <div class="game-card" onclick="window.open('https://slopegame.online', '_blank')"><img src="https://imgs.crazygames.com/slope_16x9/20210804113951/slope_16x9-cover"><p>Slope</p></div>
-                    <div class="game-card" onclick="window.open('https://tunnelrush.online', '_blank')"><img src="https://imgs.crazygames.com/tunnel-rush_16x9/20210212082734/tunnel-rush_16x9-cover"><p>Tunnel Rush</p></div>
-                    <div class="game-card" onclick="window.open('https://play2048.co', '_blank')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/2048_logo.svg/1200px-2048_logo.svg.png" style="object-fit:contain; background:#faf8ef;"><p>2048</p></div>
+                    <div class="game-card" onclick="playInsideApp('Retro Bowl', 'https://www.crazygames.com/embed/retro-bowl')"><img src="https://imgs.crazygames.com/retro-bowl_16x9/20220106142828/retro-bowl_16x9-cover"><p>Retro Bowl</p></div>
+                    <div class="game-card" onclick="playInsideApp('Slope', 'https://www.crazygames.com/embed/slope')"><img src="https://imgs.crazygames.com/slope_16x9/20210804113951/slope_16x9-cover"><p>Slope</p></div>
+                    <div class="game-card" onclick="playInsideApp('Tunnel Rush', 'https://www.crazygames.com/embed/tunnel-rush')"><img src="https://imgs.crazygames.com/tunnel-rush_16x9/20210212082734/tunnel-rush_16x9-cover"><p>Tunnel Rush</p></div>
+                    <div class="game-card" onclick="playInsideApp('2048', 'https://play2048.co/')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/2048_logo.svg/1200px-2048_logo.svg.png" style="object-fit:contain; background:#faf8ef;"><p>2048</p></div>
                 </div>
             </div>
         </div>
 
-        <!-- VS Code -->
+        <!-- Dynamic App Window (For Games & Store Apps) -->
+        <div class="window" id="win-dynamic" style="width: 800px; height: 600px; top: 5%; left: 10%;">
+            <div class="window-header" onmousedown="startDrag(event, 'win-dynamic')">
+                <div class="window-title"><i class="fas fa-window-maximize"></i> <span id="dynamic-title">App</span></div>
+                <div class="window-controls">
+                    <button class="win-btn" onclick="maximizeApp('win-dynamic')"><i class="far fa-window-maximize"></i></button>
+                    <button class="win-btn" onclick="minimizeApp('win-dynamic')"><i class="fas fa-minus"></i></button>
+                    <button class="win-btn close" onclick="closeApp('win-dynamic')"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="window-content" style="background: white;">
+                <iframe id="dynamic-iframe" class="dynamic-iframe" allowfullscreen></iframe>
+            </div>
+        </div>
+
         <div class="window" id="win-vscode" style="width: 800px; height: 500px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-vscode')">
                 <div class="window-title"><i class="fas fa-code"></i> Visual Studio Code</div>
@@ -189,16 +204,11 @@
             </div>
             <div class="window-content vscode">
                 <div class="vs-sidebar">
-                    <i class="far fa-copy"></i>
-                    <i class="fas fa-search"></i>
-                    <i class="fas fa-code-branch"></i>
-                    <i class="fas fa-bug"></i>
+                    <i class="far fa-copy"></i><i class="fas fa-search"></i><i class="fas fa-code-branch"></i><i class="fas fa-bug"></i>
                 </div>
                 <div class="vs-editor">
-                    <div class="vs-tabs">
-                        <div class="vs-tab">index.html</div>
-                    </div>
-                    <textarea class="vs-code" id="vs-editor" spellcheck="false"><!DOCTYPE html>
+                    <div class="vs-tabs"><div class="vs-tab">index.html</div></div>
+                    <textarea class="vs-code" spellcheck="false"><!DOCTYPE html>
 <html>
 <head>
     <title>My App</title>
@@ -211,8 +221,7 @@
             </div>
         </div>
 
-        <!-- Settings -->
-        <div class="window" id="win-settings" style="width: 400px; height: 350px;">
+        <div class="window" id="win-settings" style="width: 600px; height: 400px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-settings')">
                 <div class="window-title"><i class="fas fa-cog"></i> Settings</div>
                 <div class="window-controls">
@@ -221,26 +230,32 @@
                     <button class="win-btn close" onclick="closeApp('win-settings')"><i class="fas fa-times"></i></button>
                 </div>
             </div>
-            <div class="window-content" style="padding: 20px;">
-                <h3>Personalization</h3>
-                <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Change background or upload your own.</p>
-                <div style="display:flex; gap:10px; margin-bottom:20px;">
-                    <div style="width:80px; height:50px; background:url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=200') center/cover; cursor:pointer; border-radius:5px;" onclick="setBG('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000')"></div>
-                    <div style="width:80px; height:50px; background:url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=200') center/cover; cursor:pointer; border-radius:5px;" onclick="setBG('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2000')"></div>
+            <div class="window-content settings-app">
+                <div class="settings-nav">
+                    <div class="active">Personalization</div>
+                    <div>System</div>
+                    <div>About</div>
                 </div>
-                <input type="file" accept="image/*" onchange="uploadBG(event)" style="color:white; background:#333; padding:10px; border-radius:5px; width:100%; border:none;">
+                <div class="settings-content">
+                    <h3>Change Wallpaper</h3>
+                    <p style="font-size:12px; color:#aaa; margin-top:5px;">Select a background for your desktop.</p>
+                    <div class="wallpaper-grid">
+                        <div style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=300');" onclick="setBG('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000')"></div>
+                        <div style="background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=300');" onclick="setBG('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2000')"></div>
+                        <div style="background-image: url('https://images.unsplash.com/photo-1533130061792-64b345e4a833?q=80&w=300');" onclick="setBG('https://images.unsplash.com/photo-1533130061792-64b345e4a833?q=80&w=2000')"></div>
+                        <div style="background: #222; display:flex; justify-content:center; align-items:center; font-size:12px; color:#aaa; position:relative; overflow:hidden;">
+                            Upload <input type="file" accept="image/*" onchange="uploadBG(event)" style="position:absolute; inset:0; opacity:0; cursor:pointer;">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Start Menu -->
     <div class="start-menu" id="start-menu">
-        <div class="start-search">
-            <input type="text" placeholder="Type here to search...">
-        </div>
-        <div class="start-apps" id="start-apps-list">
-            <!-- Injected via JS -->
-        </div>
+        <div class="start-search"><input type="text" placeholder="Type here to search..."></div>
+        <div class="start-apps" id="start-apps-list"></div>
     </div>
 
     <!-- Taskbar -->
@@ -255,14 +270,13 @@
     </div>
 
     <script>
-        // --- APP STORE LOGIC ---
+        // App Store Logic
         const storeApps = [
-            { name: "TikTok", icon: "https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg", url: "https://www.tiktok.com" },
-            { name: "YouTube", icon: "https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg", url: "https://www.youtube.com" },
-            { name: "Instagram", icon: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg", url: "https://www.instagram.com" },
-            { name: "Pinterest", icon: "https://upload.wikimedia.org/wikipedia/commons/0/08/Pinterest-logo.png", url: "https://www.pinterest.com" }
+            { name: "TikTok", icon: "https://cdn-icons-png.flaticon.com/512/3046/3046121.png", url: "https://www.tiktok.com" },
+            { name: "YouTube", icon: "https://cdn-icons-png.flaticon.com/512/1384/1384060.png", url: "https://www.youtube.com" },
+            { name: "Instagram", icon: "https://cdn-icons-png.flaticon.com/512/174/174855.png", url: "https://www.instagram.com" },
+            { name: "Pinterest", icon: "https://cdn-icons-png.flaticon.com/512/145/145808.png", url: "https://www.pinterest.com" }
         ];
-
         let installedApps = JSON.parse(localStorage.getItem('installedApps')) || [];
 
         function renderStore() {
@@ -272,106 +286,80 @@
                 const isInstalled = installedApps.some(a => a.name === app.name);
                 const el = document.createElement('div');
                 el.className = 'store-app';
-                el.innerHTML = `
-                    <img src="${app.icon}">
-                    <span style="font-size:12px; font-weight:bold; margin-bottom:5px;">${app.name}</span>
-                    <button onclick="installApp('${app.name}', '${app.icon}', '${app.url}')">${isInstalled ? 'Open' : 'Get'}</button>
-                `;
+                el.innerHTML = `<img src="${app.icon}"><span style="font-size:12px; font-weight:bold;">${app.name}</span><button onclick="installApp('${app.name}', '${app.icon}', '${app.url}')">${isInstalled ? 'Open' : 'Get'}</button>`;
                 grid.appendChild(el);
             });
         }
 
         function installApp(name, icon, url) {
             if(!installedApps.some(a => a.name === name)) {
-                // Play install sound
                 const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
                 audio.play();
-
                 installedApps.push({ name, icon, url });
                 localStorage.setItem('installedApps', JSON.stringify(installedApps));
                 renderStore();
                 renderInstalledApps();
             } else {
-                window.open(url, '_blank');
+                // Open inside dynamic window!
+                playInsideApp(name, url);
             }
         }
 
         function renderInstalledApps() {
-            // Add to desktop
             const desktop = document.getElementById('desktop');
-            document.querySelectorAll('.installed-icon').forEach(el => el.remove()); // Clear old
-            
+            document.querySelectorAll('.installed-icon').forEach(el => el.remove());
             installedApps.forEach(app => {
                 const el = document.createElement('div');
                 el.className = 'desktop-icon installed-icon';
-                el.ondblclick = () => window.open(app.url, '_blank');
+                el.ondblclick = () => playInsideApp(app.name, app.url);
                 el.innerHTML = `<img src="${app.icon}"><span>${app.name}</span>`;
                 desktop.appendChild(el);
             });
-
-            // Add to start menu
             const startList = document.getElementById('start-apps-list');
             startList.innerHTML = '';
             installedApps.forEach(app => {
                 const el = document.createElement('div');
                 el.className = 'start-app';
-                el.onclick = () => window.open(app.url, '_blank');
+                el.onclick = () => playInsideApp(app.name, app.url);
                 el.innerHTML = `<img src="${app.icon}"><span>${app.name}</span>`;
                 startList.appendChild(el);
             });
         }
 
-        // --- TERMINAL LOGIC ---
+        // Open Game or App inside the OS
+        function playInsideApp(title, url) {
+            document.getElementById('dynamic-title').innerText = title;
+            document.getElementById('dynamic-iframe').src = url;
+            openApp('dynamic');
+        }
+
+        // Terminal Logic
         function handleTerm(e) {
             if(e.key === 'Enter') {
                 const input = document.getElementById('term-input').value;
                 const output = document.getElementById('term-output');
                 output.innerHTML += `<br>C:\\Users\\Chief> ${input}<br>`;
-                
-                if(input === 'help') {
-                    output.innerHTML += `Available commands:<br>- help: Show this menu<br>- clear: Clear screen<br>- date: Show current date<br>- echo [text]: Print text<br>- open [app]: Open an app (store, games, vscode)`;
-                } else if(input === 'clear') {
-                    output.innerHTML = '';
-                } else if(input === 'date') {
-                    output.innerHTML += new Date().toString();
-                } else if(input.startsWith('echo ')) {
-                    output.innerHTML += input.substring(5);
-                } else if(input.startsWith('open ')) {
-                    openApp(input.substring(5));
-                } else if(input !== '') {
-                    output.innerHTML += `'${input}' is not recognized as an internal or external command.`;
-                }
-                
+                if(input === 'help') output.innerHTML += `Commands: help, clear, date, echo, open [app]`;
+                else if(input === 'clear') output.innerHTML = '';
+                else if(input === 'date') output.innerHTML += new Date().toString();
+                else if(input.startsWith('echo ')) output.innerHTML += input.substring(5);
+                else if(input.startsWith('open ')) openApp(input.substring(5));
+                else if(input !== '') output.innerHTML += `'${input}' is not recognized...`;
                 document.getElementById('term-input').value = '';
                 output.scrollTop = output.scrollHeight;
             }
         }
 
-        // --- WINDOW MANAGEMENT ---
-        function toggleStart() {
-            document.getElementById('start-menu').classList.toggle('active');
-        }
-
+        // Window Management
+        function toggleStart() { document.getElementById('start-menu').classList.toggle('active'); }
         function openApp(app) {
             document.getElementById('start-menu').classList.remove('active');
             const win = document.getElementById(`win-${app}`);
-            if(win) {
-                win.classList.add('active');
-                win.style.zIndex = 1000;
-            }
+            if(win) { win.classList.add('active'); win.style.zIndex = 1000; }
         }
-
-        function closeApp(app) {
-            document.getElementById(`win-${app}`).classList.remove('active');
-        }
-
-        function minimizeApp(app) {
-            document.getElementById(`win-${app}`).classList.remove('active');
-        }
-
-        function maximizeApp(app) {
-            document.getElementById(`win-${app}`).classList.toggle('maximized');
-        }
+        function closeApp(app) { document.getElementById(`win-${app}`).classList.remove('active'); }
+        function minimizeApp(app) { document.getElementById(`win-${app}`).classList.remove('active'); }
+        function maximizeApp(app) { document.getElementById(`win-${app}`).classList.toggle('maximized'); }
 
         // Drag Logic
         let activeWindow = null, offsetX = 0, offsetY = 0;
@@ -389,26 +377,15 @@
             activeWindow.style.left = (e.clientX - offsetX) + 'px';
             activeWindow.style.top = (e.clientY - offsetY) + 'px';
         }
-        function stopDrag() {
-            activeWindow = null;
-            document.removeEventListener('mousemove', drag);
-            document.removeEventListener('mouseup', stopDrag);
-        }
+        function stopDrag() { activeWindow = null; document.removeEventListener('mousemove', drag); document.removeEventListener('mouseup', stopDrag); }
 
         // Settings BG
-        function setBG(url) {
-            document.body.style.backgroundImage = `url('${url}')`;
-        }
+        function setBG(url) { document.body.style.backgroundImage = `url('${url}')`; }
         function uploadBG(event) {
             const file = event.target.files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = (e) => { setBG(e.target.result); };
-                reader.readAsDataURL(file);
-            }
+            if(file) { const reader = new FileReader(); reader.onload = (e) => { setBG(e.target.result); }; reader.readAsDataURL(file); }
         }
 
-        // Init
         renderStore();
         renderInstalledApps();
     </script>
