@@ -59,15 +59,30 @@
 
         /* App Content */
         .proxy-search iframe { width: 100%; height: 100%; border: none; }
+        
         .app-store { padding: 20px; }
         .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; }
         .store-app { background: #333; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; text-align: center; transition: 0.2s; }
         .store-app img { width: 50px; height: 50px; border-radius: 10px; margin-bottom: 10px; }
         .store-app button { margin-top: 10px; padding: 5px 15px; border-radius: 15px; border: none; background: #0078D7; color: white; font-weight: bold; cursor: pointer; }
+        
         .games-app { padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .game-card { background: #222; border-radius: 10px; overflow: hidden; cursor: pointer; text-align: center; border: 1px solid #333; }
         .game-card img { width: 100%; height: 120px; object-fit: cover; }
         .game-card p { padding: 10px; color: white; font-weight: bold; }
+
+        /* Music App */
+        .music-app { display: flex; flex-direction: column; height: 100%; background: #121212; padding: 20px; }
+        .music-search { display: flex; gap: 10px; margin-bottom: 20px; }
+        .music-search input { flex: 1; padding: 12px; border-radius: 20px; border: none; background: #2a2a2a; color: white; outline: none; }
+        .music-search button { padding: 12px 25px; border-radius: 20px; border: none; background: #1db954; color: black; font-weight: bold; cursor: pointer; }
+        .music-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; overflow-y: auto; flex: 1; }
+        .music-card { background: #181818; padding: 15px; border-radius: 8px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .music-card:hover { background: #282828; }
+        .music-card img { width: 100%; aspect-ratio: 1; border-radius: 5px; margin-bottom: 10px; }
+        .music-card h4 { font-size: 14px; color: white; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .music-card p { font-size: 12px; color: #b3b3b3; }
+        #yt-player-container { position: absolute; bottom: 0; right: 0; width: 1px; height: 1px; opacity: 0.01; pointer-events: none; }
 
         /* Settings */
         .settings-app { display: flex; height: 100%; }
@@ -98,6 +113,7 @@
         <div class="desktop-icon" ondblclick="openApp('terminal')"><img src="https://cdn-icons-png.flaticon.com/512/919/919831.png"><span>Terminal</span></div>
         <div class="desktop-icon" ondblclick="openApp('store')"><img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png"><span>App Store</span></div>
         <div class="desktop-icon" ondblclick="openApp('search')"><img src="https://cdn-icons-png.flaticon.com/512/888/888846.png"><span>Browser</span></div>
+        <div class="desktop-icon" ondblclick="openApp('music')"><img src="https://cdn-icons-png.flaticon.com/512/3844/3844724.png"><span>Music</span></div>
         <div class="desktop-icon" ondblclick="openApp('vscode')"><img src="https://cdn-icons-png.flaticon.com/512/906/906324.png"><span>VS Code</span></div>
         <div class="desktop-icon" ondblclick="openApp('games')"><img src="https://cdn-icons-png.flaticon.com/512/686/686589.png"><span>Games</span></div>
         <div class="desktop-icon" ondblclick="openApp('settings')"><img src="https://cdn-icons-png.flaticon.com/512/2099/2099083.png"><span>Settings</span></div>
@@ -106,11 +122,7 @@
         <div class="window" id="win-terminal" style="width: 600px; height: 400px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-terminal')">
                 <div class="window-title"><i class="fas fa-terminal"></i> Command Prompt</div>
-                <div class="window-controls">
-                    <button class="win-btn" onclick="maximizeApp('win-terminal')"><i class="far fa-window-maximize"></i></button>
-                    <button class="win-btn" onclick="minimizeApp('win-terminal')"><i class="fas fa-minus"></i></button>
-                    <button class="win-btn close" onclick="closeApp('win-terminal')"><i class="fas fa-times"></i></button>
-                </div>
+                <div class="window-controls"><button class="win-btn" onclick="maximizeApp('win-terminal')"><i class="far fa-window-maximize"></i></button><button class="win-btn" onclick="minimizeApp('win-terminal')"><i class="fas fa-minus"></i></button><button class="win-btn close" onclick="closeApp('win-terminal')"><i class="fas fa-times"></i></button></div>
             </div>
             <div class="window-content terminal">
                 <div class="term-output" id="term-output">GhostOS [Version 3.0.1]<br>Type "help" for a list of commands.</div>
@@ -123,16 +135,36 @@
                 <div class="window-title"><i class="fas fa-store"></i> App Store</div>
                 <div class="window-controls"><button class="win-btn" onclick="maximizeApp('win-store')"><i class="far fa-window-maximize"></i></button><button class="win-btn" onclick="minimizeApp('win-store')"><i class="fas fa-minus"></i></button><button class="win-btn close" onclick="closeApp('win-store')"><i class="fas fa-times"></i></button></div>
             </div>
-            <div class="window-content app-store"><h2>Featured Apps</h2><div class="store-grid" id="store-grid"></div></div>
+            <div class="window-content app-store">
+                <h2>Featured Apps</h2>
+                <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Right-click desktop icons to uninstall.</p>
+                <div class="store-grid" id="store-grid"></div>
+            </div>
         </div>
 
         <div class="window" id="win-search" style="width: 800px; height: 500px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-search')">
-                <div class="window-title"><i class="fas fa-globe"></i> Proxy Browser</div>
+                <div class="window-title"><i class="fas fa-globe"></i> Browser</div>
                 <div class="window-controls"><button class="win-btn" onclick="maximizeApp('win-search')"><i class="far fa-window-maximize"></i></button><button class="win-btn" onclick="minimizeApp('win-search')"><i class="fas fa-minus"></i></button><button class="win-btn close" onclick="closeApp('win-search')"><i class="fas fa-times"></i></button></div>
             </div>
             <div class="window-content proxy-search">
                 <iframe src="https://search.marginalia.nu/" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <!-- MUSIC PLAYER -->
+        <div class="window" id="win-music" style="width: 600px; height: 500px;">
+            <div class="window-header" onmousedown="startDrag(event, 'win-music')">
+                <div class="window-title"><i class="fas fa-music"></i> Ghost Music</div>
+                <div class="window-controls"><button class="win-btn" onclick="maximizeApp('win-music')"><i class="far fa-window-maximize"></i></button><button class="win-btn" onclick="minimizeApp('win-music')"><i class="fas fa-minus"></i></button><button class="win-btn close" onclick="closeApp('win-music')"><i class="fas fa-times"></i></button></div>
+            </div>
+            <div class="window-content music-app">
+                <div class="music-search">
+                    <input type="text" id="music-query" placeholder="Search for a song or artist..." onkeypress="if(event.key === 'Enter') searchMusic()">
+                    <button onclick="searchMusic()">Search</button>
+                </div>
+                <div class="music-grid" id="music-grid"></div>
+                <div id="yt-player-container"></div>
             </div>
         </div>
 
@@ -201,6 +233,7 @@
         <div class="taskbar-icon" onclick="openApp('terminal')"><i class="fas fa-terminal"></i></div>
         <div class="taskbar-icon" onclick="openApp('store')"><i class="fas fa-store"></i></div>
         <div class="taskbar-icon" onclick="openApp('search')"><i class="fas fa-globe" style="color: #4fc3f7;"></i></div>
+        <div class="taskbar-icon" onclick="openApp('music')"><i class="fas fa-music" style="color: #1db954;"></i></div>
         <div class="taskbar-icon" onclick="openApp('games')"><i class="fas fa-gamepad" style="color: #81c784;"></i></div>
         <div class="taskbar-icon" onclick="openApp('vscode')"><i class="fas fa-code" style="color: #0078D7;"></i></div>
         <div class="taskbar-icon" onclick="openApp('settings')"><i class="fas fa-cog" style="color: #b0bec5;"></i></div>
@@ -233,7 +266,6 @@
                 renderStore();
                 renderInstalledApps();
             } else {
-                // Opens in new tab because the school blocks iframes
                 window.open(url, '_blank');
             }
         }
@@ -241,13 +273,54 @@
         function renderInstalledApps() {
             const desktop = document.getElementById('desktop');
             document.querySelectorAll('.installed-icon').forEach(el => el.remove());
-            installedApps.forEach(app => {
+            installedApps.forEach((app, index) => {
                 const el = document.createElement('div');
                 el.className = 'desktop-icon installed-icon';
-                el.ondblclick = () => window.open(app.url, '_blank'); // Open new tab
+                el.ondblclick = () => window.open(app.url, '_blank');
+                
+                // RIGHT CLICK TO UNINSTALL
+                el.oncontextmenu = (e) => {
+                    e.preventDefault();
+                    if(confirm(`Uninstall ${app.name}?`)) {
+                        installedApps.splice(index, 1);
+                        localStorage.setItem('installedApps', JSON.stringify(installedApps));
+                        renderStore();
+                        renderInstalledApps();
+                    }
+                };
+
                 el.innerHTML = `<img src="${app.icon}"><span>${app.name}</span>`;
                 desktop.appendChild(el);
             });
+        }
+
+        // --- MUSIC LOGIC (Full YouTube Audio) ---
+        async function searchMusic() {
+            const q = document.getElementById('music-query').value;
+            if(!q) return;
+            const grid = document.getElementById('music-grid');
+            grid.innerHTML = '<div style="color:white;">Searching...</div>';
+            
+            try {
+                // Use Invidious API to get real YouTube videos
+                const res = await fetch(`https://inv.nadeko.net/api/v1/search?q=${encodeURIComponent(q)}&type=video`);
+                const data = await res.json();
+                grid.innerHTML = '';
+                
+                data.slice(0, 12).forEach(v => {
+                    if(!v.videoId) return;
+                    const div = document.createElement('div');
+                    div.className = 'music-card';
+                    div.innerHTML = `<img src="${v.videoThumbnails[0].url}"><h4>${v.title}</h4><p>${v.author}</p>`;
+                    div.onclick = () => {
+                        // Play full song via invisible YouTube iframe
+                        document.getElementById('yt-player-container').innerHTML = `
+                            <iframe src="https://www.youtube.com/embed/${v.videoId}?autoplay=1" allow="autoplay"></iframe>
+                        `;
+                    };
+                    grid.appendChild(div);
+                });
+            } catch(e) { grid.innerHTML = '<div style="color:red;">Search blocked by school.</div>'; }
         }
 
         function runCode() {
@@ -285,13 +358,15 @@
             const win = document.getElementById(`win-${app}`);
             if(win) { win.classList.add('active'); win.style.zIndex = 1000; }
         }
-        function closeApp(app) { document.getElementById(`win-${app}`).classList.remove('active'); }
+        function closeApp(app) { 
+            document.getElementById(`win-${app}`).classList.remove('active'); 
+            if(app === 'music') document.getElementById('yt-player-container').innerHTML = ''; // Stop music when closed
+        }
         function minimizeApp(app) { document.getElementById(`win-${app}`).classList.remove('active'); }
         function maximizeApp(app) { document.getElementById(`win-${app}`).classList.toggle('maximized'); }
 
-        // --- THE DRAG-TO-DELETE FIX ---
+        // Drag & Delete Logic
         let activeWindow = null, offsetX = 0, offsetY = 0;
-        
         function startDrag(e, id) {
             if(e.target.tagName === 'BUTTON' || e.target.tagName === 'I' || e.target.closest('.window-controls')) return;
             activeWindow = document.getElementById(id);
@@ -301,32 +376,16 @@
             document.addEventListener('mousemove', drag);
             document.addEventListener('mouseup', stopDrag);
         }
-
         function drag(e) {
             if (!activeWindow || activeWindow.classList.contains('maximized')) return;
-            
-            const x = e.clientX - offsetX;
-            const y = e.clientY - offsetY;
-            
-            activeWindow.style.left = x + 'px';
-            activeWindow.style.top = y + 'px';
-
-            // Check if dragged to the bottom (Trash Zone)
-            if (e.clientY > window.innerHeight - 60) {
-                activeWindow.classList.add('trash-hover');
-            } else {
-                activeWindow.classList.remove('trash-hover');
-            }
+            activeWindow.style.left = (e.clientX - offsetX) + 'px';
+            activeWindow.style.top = (e.clientY - offsetY) + 'px';
+            if (e.clientY > window.innerHeight - 60) activeWindow.classList.add('trash-hover');
+            else activeWindow.classList.remove('trash-hover');
         }
-
         function stopDrag(e) {
             if (!activeWindow) return;
-            
-            // If released at the bottom, delete the window
-            if (e.clientY > window.innerHeight - 60) {
-                closeApp(activeWindow.id.replace('win-', ''));
-            }
-            
+            if (e.clientY > window.innerHeight - 60) closeApp(activeWindow.id.replace('win-', ''));
             activeWindow.classList.remove('trash-hover');
             activeWindow = null;
             document.removeEventListener('mousemove', drag);
