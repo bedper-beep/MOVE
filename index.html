@@ -92,7 +92,8 @@
     </div>
 
     <div class="desktop">
-        <div class="app-icon" onclick="window.open('https://triplet.getfounddsos.net', '_blank')"><div class="icon-box bg-movies"><i class="fas fa-film"></i></div><span>Movies</span></div>
+        <!-- New Fullscreen launcher for Movies -->
+        <div class="app-icon" onclick="launchFullscreenMovie()"><div class="icon-box bg-movies"><i class="fas fa-film"></i></div><span>Movies</span></div>
         
         <div class="app-icon" onclick="openApp('music')"><div class="icon-box bg-music"><i class="fas fa-music"></i></div><span>Music</span></div>
         <div class="app-icon" onclick="openApp('games')"><div class="icon-box bg-games"><i class="fas fa-gamepad"></i></div><span>Games</span></div>
@@ -166,7 +167,7 @@
     </div>
 
     <div class="dock">
-        <div class="dock-icon bg-movies" onclick="window.open('https://triplet.getfounddsos.net', '_blank')"><i class="fas fa-film"></i></div>
+        <div class="dock-icon bg-movies" onclick="launchFullscreenMovie()"><i class="fas fa-film"></i></div>
         <div class="dock-icon bg-music" onclick="openApp('music')"><i class="fas fa-music"></i></div>
         <div class="dock-icon bg-games" onclick="openApp('games')"><i class="fas fa-gamepad"></i></div>
         <div class="dock-icon bg-notes" onclick="openApp('notes')"><i class="fas fa-sticky-note"></i></div>
@@ -202,6 +203,27 @@
                 const reader = new FileReader();
                 reader.onload = (e) => { setBG(e.target.result); };
                 reader.readAsDataURL(file);
+            }
+        }
+
+        // THE NEW FULLSCREEN MOVIE LAUNCHER
+        function launchFullscreenMovie() {
+            // 1. Create a temporary container to force fullscreen on the main document
+            const docEl = document.documentElement;
+            if (docEl.requestFullscreen) {
+                docEl.requestFullscreen().then(() => {
+                    // 2. Once the OS is fullscreen, open the movie site in a new tab
+                    window.open('https://triplet.getfounddsos.net', '_blank');
+                    // 3. Exit fullscreen on the main OS so it doesn't get stuck
+                    setTimeout(() => {
+                        if (document.exitFullscreen) document.exitFullscreen();
+                    }, 500);
+                }).catch(err => {
+                    // If fullscreen fails (e.g. school blocks it), just open the tab normally
+                    window.open('https://triplet.getfounddsos.net', '_blank');
+                });
+            } else {
+                window.open('https://triplet.getfounddsos.net', '_blank');
             }
         }
 
