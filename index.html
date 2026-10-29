@@ -21,7 +21,8 @@
         .login-btn { padding: 10px 30px; border-radius: 20px; border: none; background: #0078D7; color: white; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s; width: 250px; }
         .login-btn.guest { background: #444; }
         .login-btn:hover { opacity: 0.8; }
-        .login-msg { color: #ff3333; margin-top: 5px; font-size: 13px; height: 15px; }
+        
+        .skip-btn { position: absolute; bottom: 20px; right: 20px; background: transparent; color: #aaa; border: 1px solid #aaa; padding: 5px 15px; border-radius: 15px; cursor: pointer; font-size: 12px; z-index: 100000; }
 
         /* Shake Animation */
         @keyframes shake {
@@ -78,13 +79,11 @@
 
         /* App Content */
         .proxy-search iframe { width: 100%; height: 100%; border: none; }
-        
         .app-store { padding: 20px; }
         .store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; }
         .store-app { background: #333; border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center; text-align: center; transition: 0.2s; }
         .store-app img { width: 50px; height: 50px; border-radius: 10px; margin-bottom: 10px; }
         .store-app button { margin-top: 10px; padding: 5px 15px; border-radius: 15px; border: none; background: #0078D7; color: white; font-weight: bold; cursor: pointer; }
-
         .games-app { padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .game-card { background: #222; border-radius: 10px; overflow: hidden; cursor: pointer; text-align: center; border: 1px solid #333; }
         .game-card img { width: 100%; height: 120px; object-fit: cover; }
@@ -110,7 +109,6 @@
         .vs-tab { padding: 10px 20px; background: #1e1e1e; color: white; font-size: 12px; border-right: 1px solid #333; }
         .vs-run-btn { background: #28a745; color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: bold; }
         .vs-code { flex: 1; padding: 10px; background: #1e1e1e; color: #d4d4d4; font-family: 'JetBrains Mono', monospace; outline: none; resize: none; border: none; font-size: 14px; line-height: 1.5; }
-        
         .dynamic-iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
@@ -124,33 +122,19 @@
             <input type="password" class="login-input" id="login-pass" placeholder="Password (Default: 1234)" onkeypress="if(event.key === 'Enter') login()">
             <button class="login-btn" onclick="login()">Sign In</button>
             <button class="login-btn guest" onclick="loginGuest()">Sign in as Guest</button>
-            <div class="login-msg" id="login-msg"></div>
         </div>
+        <button class="skip-btn" onclick="loginGuest()">Skip Login ⏭</button>
     </div>
 
     <div class="desktop" id="desktop">
-        <div class="desktop-icon" ondblclick="openApp('terminal')">
-            <img src="https://cdn-icons-png.flaticon.com/512/919/919831.png"><span>Terminal</span>
-        </div>
-        <div class="desktop-icon" ondblclick="openApp('store')">
-            <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png"><span>App Store</span>
-        </div>
-        <div class="desktop-icon" ondblclick="openApp('search')">
-            <img src="https://cdn-icons-png.flaticon.com/512/888/888846.png"><span>Browser</span>
-        </div>
-        <div class="desktop-icon" ondblclick="openApp('vscode')">
-            <img src="https://cdn-icons-png.flaticon.com/512/906/906324.png"><span>VS Code</span>
-        </div>
-        <div class="desktop-icon" ondblclick="openApp('games')">
-            <img src="https://cdn-icons-png.flaticon.com/512/686/686589.png"><span>Games</span>
-        </div>
-        <div class="desktop-icon" ondblclick="openApp('settings')">
-            <img src="https://cdn-icons-png.flaticon.com/512/2099/2099083.png"><span>Settings</span>
-        </div>
+        <div class="desktop-icon" ondblclick="openApp('terminal')"><img src="https://cdn-icons-png.flaticon.com/512/919/919831.png"><span>Terminal</span></div>
+        <div class="desktop-icon" ondblclick="openApp('store')"><img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png"><span>App Store</span></div>
+        <div class="desktop-icon" ondblclick="openApp('search')"><img src="https://cdn-icons-png.flaticon.com/512/888/888846.png"><span>Browser</span></div>
+        <div class="desktop-icon" ondblclick="openApp('vscode')"><img src="https://cdn-icons-png.flaticon.com/512/906/906324.png"><span>VS Code</span></div>
+        <div class="desktop-icon" ondblclick="openApp('games')"><img src="https://cdn-icons-png.flaticon.com/512/686/686589.png"><span>Games</span></div>
+        <div class="desktop-icon" ondblclick="openApp('settings')"><img src="https://cdn-icons-png.flaticon.com/512/2099/2099083.png"><span>Settings</span></div>
 
-        <!-- Windows (Terminal, Store, Search, Games, Dynamic, VSCode, Settings) -->
-        <!-- Paste all the window divs from the previous code here -->
-        <!-- To save space in this message, I'm assuming they are the same as before -->
+        <!-- Windows -->
         <div class="window" id="win-terminal" style="width: 600px; height: 400px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-terminal')">
                 <div class="window-title"><i class="fas fa-terminal"></i> Command Prompt</div>
@@ -162,50 +146,30 @@
             </div>
             <div class="window-content terminal">
                 <div class="term-output" id="term-output">GhostOS [Version 3.0.1]<br>Type "help" for a list of commands.</div>
-                <div class="term-input-line">
-                    <span>C:\Users\Chief></span>
-                    <input type="text" id="term-input" onkeypress="handleTerm(event)">
-                </div>
+                <div class="term-input-line"><span>C:\Users\Chief></span><input type="text" id="term-input" onkeypress="handleTerm(event)"></div>
             </div>
         </div>
 
         <div class="window" id="win-store" style="width: 600px; height: 450px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-store')">
                 <div class="window-title"><i class="fas fa-store"></i> App Store</div>
-                <div class="window-controls">
-                    <button class="win-btn" onclick="maximizeApp('win-store')"><i class="far fa-window-maximize"></i></button>
-                    <button class="win-btn" onclick="minimizeApp('win-store')"><i class="fas fa-minus"></i></button>
-                    <button class="win-btn close" onclick="closeApp('win-store')"><i class="fas fa-times"></i></button>
-                </div>
+                <div class="window-controls"><button class="win-btn" onclick="maximizeApp('win-store')"><i class="far fa-window-maximize"></i></button><button class="win-btn" onclick="minimizeApp('win-store')"><i class="fas fa-minus"></i></button><button class="win-btn close" onclick="closeApp('win-store')"><i class="fas fa-times"></i></button></div>
             </div>
-            <div class="window-content app-store">
-                <h2>Featured Apps</h2>
-                <div class="store-grid" id="store-grid"></div>
-            </div>
+            <div class="window-content app-store"><h2>Featured Apps</h2><div class="store-grid" id="store-grid"></div></div>
         </div>
 
         <div class="window" id="win-search" style="width: 800px; height: 500px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-search')">
                 <div class="window-title"><i class="fas fa-globe"></i> Proxy Browser</div>
-                <div class="window-controls">
-                    <button class="win-btn" onclick="maximizeApp('win-search')"><i class="far fa-window-maximize"></i></button>
-                    <button class="win-btn" onclick="minimizeApp('win-search')"><i class="fas fa-minus"></i></button>
-                    <button class="win-btn close" onclick="closeApp('win-search')"><i class="fas fa-times"></i></button>
-                </div>
+                <div class="window-controls"><button class="win-btn" onclick="maximizeApp('win-search')"><i class="far fa-window-maximize"></i></button><button class="win-btn" onclick="minimizeApp('win-search')"><i class="fas fa-minus"></i></button><button class="win-btn close" onclick="closeApp('win-search')"><i class="fas fa-times"></i></button></div>
             </div>
-            <div class="window-content proxy-search">
-                <iframe src="https://search.marginalia.nu/" allowfullscreen></iframe>
-            </div>
+            <div class="window-content proxy-search"><iframe src="https://search.marginalia.nu/" allowfullscreen></iframe></div>
         </div>
 
         <div class="window" id="win-games" style="width: 700px; height: 500px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-games')">
                 <div class="window-title"><i class="fas fa-gamepad"></i> Games Hub</div>
-                <div class="window-controls">
-                    <button class="win-btn" onclick="maximizeApp('win-games')"><i class="far fa-window-maximize"></i></button>
-                    <button class="win-btn" onclick="minimizeApp('win-games')"><i class="fas fa-minus"></i></button>
-                    <button class="win-btn close" onclick="closeApp('win-games')"><i class="fas fa-times"></i></button>
-                </div>
+                <div class="window-controls"><button class="win-btn" onclick="maximizeApp('win-games')"><i class="far fa-window-maximize"></i></button><button class="win-btn" onclick="minimizeApp('win-games')"><i class="fas fa-minus"></i></button><button class="win-btn close" onclick="closeApp('win-games')"><i class="fas fa-times"></i></button></div>
             </div>
             <div class="window-content">
                 <div class="games-app">
@@ -218,33 +182,20 @@
         <div class="window" id="win-dynamic" style="width: 800px; height: 600px; top: 5%; left: 10%;">
             <div class="window-header" onmousedown="startDrag(event, 'win-dynamic')">
                 <div class="window-title"><i class="fas fa-window-maximize"></i> <span id="dynamic-title">App</span></div>
-                <div class="window-controls">
-                    <button class="win-btn" onclick="maximizeApp('win-dynamic')"><i class="far fa-window-maximize"></i></button>
-                    <button class="win-btn" onclick="minimizeApp('win-dynamic')"><i class="fas fa-minus"></i></button>
-                    <button class="win-btn close" onclick="closeApp('win-dynamic')"><i class="fas fa-times"></i></button>
-                </div>
+                <div class="window-controls"><button class="win-btn" onclick="maximizeApp('win-dynamic')"><i class="far fa-window-maximize"></i></button><button class="win-btn" onclick="minimizeApp('win-dynamic')"><i class="fas fa-minus"></i></button><button class="win-btn close" onclick="closeApp('win-dynamic')"><i class="fas fa-times"></i></button></div>
             </div>
-            <div class="window-content" style="background: white;">
-                <iframe id="dynamic-iframe" class="dynamic-iframe" allowfullscreen></iframe>
-            </div>
+            <div class="window-content" style="background: white;"><iframe id="dynamic-iframe" class="dynamic-iframe" allowfullscreen></iframe></div>
         </div>
 
         <div class="window" id="win-vscode" style="width: 800px; height: 500px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-vscode')">
                 <div class="window-title"><i class="fas fa-code"></i> Visual Studio Code</div>
-                <div class="window-controls">
-                    <button class="win-btn" onclick="maximizeApp('win-vscode')"><i class="far fa-window-maximize"></i></button>
-                    <button class="win-btn" onclick="minimizeApp('win-vscode')"><i class="fas fa-minus"></i></button>
-                    <button class="win-btn close" onclick="closeApp('win-vscode')"><i class="fas fa-times"></i></button>
-                </div>
+                <div class="window-controls"><button class="win-btn" onclick="maximizeApp('win-vscode')"><i class="far fa-window-maximize"></i></button><button class="win-btn" onclick="minimizeApp('win-vscode')"><i class="fas fa-minus"></i></button><button class="win-btn close" onclick="closeApp('win-vscode')"><i class="fas fa-times"></i></button></div>
             </div>
             <div class="window-content vscode">
                 <div class="vs-sidebar"><i class="far fa-copy"></i><i class="fas fa-search"></i><i class="fas fa-code-branch"></i></div>
                 <div class="vs-editor">
-                    <div class="vs-topbar">
-                        <div class="vs-tabs"><div class="vs-tab">index.html</div></div>
-                        <button class="vs-run-btn" onclick="runCode()"><i class="fas fa-play"></i> Run</button>
-                    </div>
+                    <div class="vs-topbar"><div class="vs-tabs"><div class="vs-tab">index.html</div></div><button class="vs-run-btn" onclick="runCode()"><i class="fas fa-play"></i> Run</button></div>
                     <textarea class="vs-code" id="vs-code-area" spellcheck="false"><h1 style="color:red;">Hello World!</h1></textarea>
                 </div>
             </div>
@@ -253,11 +204,7 @@
         <div class="window" id="win-settings" style="width: 600px; height: 400px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-settings')">
                 <div class="window-title"><i class="fas fa-cog"></i> Settings</div>
-                <div class="window-controls">
-                    <button class="win-btn" onclick="maximizeApp('win-settings')"><i class="far fa-window-maximize"></i></button>
-                    <button class="win-btn" onclick="minimizeApp('win-settings')"><i class="fas fa-minus"></i></button>
-                    <button class="win-btn close" onclick="closeApp('win-settings')"><i class="fas fa-times"></i></button>
-                </div>
+                <div class="window-controls"><button class="win-btn" onclick="maximizeApp('win-settings')"><i class="far fa-window-maximize"></i></button><button class="win-btn" onclick="minimizeApp('win-settings')"><i class="fas fa-minus"></i></button><button class="win-btn close" onclick="closeApp('win-settings')"><i class="fas fa-times"></i></button></div>
             </div>
             <div class="window-content settings-app">
                 <div class="settings-nav">
@@ -313,12 +260,7 @@
             } else {
                 const passInput = document.getElementById('login-pass');
                 passInput.classList.add('shake');
-                document.getElementById('login-msg').innerText = "Incorrect password.";
-                setTimeout(() => {
-                    passInput.classList.remove('shake');
-                    document.getElementById('login-msg').innerText = "";
-                    passInput.value = '';
-                }, 1000);
+                setTimeout(() => passInput.classList.remove('shake'), 400);
             }
         }
 
@@ -449,4 +391,12 @@
         }
         function drag(e) {
             if (!activeWindow || activeWindow.classList.contains('maximized')) return;
-            activeWindow.style.left = (e.client
+            activeWindow.style.left = (e.clientX - offsetX) + 'px';
+            activeWindow.style.top = (e.clientY - offsetY) + 'px';
+        }
+        function stopDrag() { activeWindow = null; document.removeEventListener('mousemove', drag); document.removeEventListener('mouseup', stopDrag); }
+
+        function setBG(url) { document.body.style.backgroundImage = `url('${url}')`; }
+        function uploadBG(event) {
+            const file = event.target.files[0];
+            if(file) { const reader = new FileReader(); reader.onload = (e) => { setBG(e.target.result); }; reader.readAsDataURL(file); }
