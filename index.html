@@ -3,249 +3,260 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GhostFlix</title>
+    <title>GhostOS | Final</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: #0f0f0f; color: white; overflow-x: hidden; }
-
-        .navbar { position: fixed; top: 0; width: 100%; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%); z-index: 100; transition: 0.3s; }
-        .nav-left { display: flex; align-items: center; gap: 30px; }
-        .logo { font-size: 24px; font-weight: 800; color: #ff3333; letter-spacing: 1px; cursor: pointer; }
-        .nav-links { display: flex; gap: 20px; }
-        .nav-links a { color: #ddd; text-decoration: none; font-size: 14px; font-weight: 600; transition: 0.2s; cursor: pointer; }
-        .nav-links a:hover, .nav-links a.active { color: white; }
-        .nav-right { display: flex; gap: 20px; font-size: 18px; color: white; cursor: pointer; }
-
-        .hero { height: 75vh; background-size: cover; background-position: center top; position: relative; display: flex; align-items: flex-end; padding: 50px; }
-        .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, #0f0f0f 0%, transparent 60%), linear-gradient(to right, #0f0f0f 0%, transparent 50%); }
-        .hero-content { position: relative; z-index: 10; max-width: 600px; }
-        .hero-title { font-size: 56px; font-weight: 800; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase; text-shadow: 0 4px 10px rgba(0,0,0,0.8); }
-        .hero-meta { display: flex; align-items: center; gap: 15px; font-size: 13px; color: #ccc; margin-bottom: 15px; }
-        .badge { background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-weight: bold; backdrop-filter: blur(5px); }
-        .hero-desc { font-size: 15px; line-height: 1.5; color: #ddd; margin-bottom: 25px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        .hero-btns { display: flex; gap: 15px; }
-        .btn { padding: 12px 25px; border-radius: 8px; font-size: 16px; font-weight: bold; border: none; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
-        .btn-play { background: white; color: black; }
-        .btn-play:hover { background: #ddd; transform: scale(1.05); }
-        .btn-info { background: rgba(255,255,255,0.2); color: white; backdrop-filter: blur(5px); }
-
-        .row { padding: 20px 50px; margin-bottom: 30px; position: relative; z-index: 10; }
-        .row-title { font-size: 20px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .row-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1); }
-        .slider { display: flex; gap: 15px; overflow-x: scroll; scroll-behavior: smooth; padding-bottom: 20px; }
-        .slider::-webkit-scrollbar { display: none; }
-        .movie-card { min-width: 200px; width: 200px; border-radius: 10px; overflow: hidden; cursor: pointer; transition: transform 0.3s, z-index 0.3s; position: relative; background: #222; }
-        .movie-card:hover { transform: scale(1.08); z-index: 20; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .movie-card img { width: 100%; height: 300px; object-fit: cover; display: block; }
-        .movie-info { padding: 10px; position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(to top, #000, transparent); }
-        .movie-title { font-size: 14px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        /* Premium Player Modal */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; align-items: center; justify-content: center; }
-        .modal.active { display: flex; }
-        .player-wrapper { display: flex; width: 90%; max-width: 1200px; height: 70vh; gap: 20px; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; user-select: none; }
         
-        .video-area { flex: 1; background: #000; border-radius: 12px; overflow: hidden; position: relative; }
-        .video-area iframe { width: 100%; height: 100%; border: none; }
+        body { background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop') no-repeat center center fixed; background-size: cover; height: 100vh; overflow: hidden; display: flex; flex-direction: column; transition: background 0.5s; }
         
-        /* Server Selection Panel */
-        .server-panel { width: 300px; background: #111; border: 1px solid #333; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; }
-        .server-header { display: flex; justify-content: space-between; font-size: 12px; color: #888; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; }
+        .top-bar { height: 35px; background: rgba(0,0,0,0.6); backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; padding: 0 20px; color: white; font-size: 13px; font-weight: 600; z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .top-left { display: flex; gap: 15px; align-items: center; }
+        .top-right { display: flex; gap: 15px; align-items: center; }
         
-        .server-option { display: flex; align-items: center; justify-content: space-between; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s; margin-bottom: 5px; border: 1px solid transparent; }
-        .server-option:hover { background: #222; }
-        .server-option.active { background: rgba(255,51,51,0.1); border-color: #ff3333; }
+        .desktop { flex: 1; position: relative; padding: 30px; display: grid; grid-template-columns: repeat(auto-fill, 90px); grid-auto-rows: 100px; gap: 20px; align-content: flex-start; }
+        .app-icon { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.2s; color: white; }
+        .app-icon:hover .icon-box { transform: scale(1.05); }
+        .icon-box { width: 65px; height: 65px; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); margin-bottom: 8px; transition: 0.2s; }
+        .app-icon span { font-size: 13px; font-weight: 500; text-shadow: 0 1px 3px rgba(0,0,0,0.8); text-align: center; }
         
-        .server-name { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
-        .flag { font-size: 16px; }
-        .server-status { font-size: 12px; }
-        .status-spin { display: inline-block; width: 12px; height: 12px; border: 2px solid #555; border-top-color: #ff3333; border-radius: 50%; animation: spin 1s linear infinite; }
-        .status-ok { color: #10b981; }
-        .status-fail { color: #ef4444; }
+        .bg-movies { background: #ff9900; color: white; }
+        .bg-music { background: #1db954; color: white; }
+        .bg-ai { background: #8b5cf6; color: white; }
+        .bg-games { background: #a970ff; color: white; }
+        .bg-settings { background: #3f3f46; color: white; }
+        .bg-notes { background: #fbbf24; color: black; }
 
-        .spinner { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; border: 4px solid #333; border-top-color: #ff3333; border-radius: 50%; animation: spin 1s linear infinite; z-index: 10; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 24px; cursor: pointer; background: rgba(0,0,0,0.5); border: 1px solid #444; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; z-index: 10; }
+        .window { position: absolute; top: 10%; left: 15%; width: 70%; height: 75%; background: rgba(20, 20, 25, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; display: none; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 100; overflow: hidden; }
+        .window.active { display: flex; animation: openWin 0.2s ease-out; }
+        @keyframes openWin { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .window-header { height: 40px; background: rgba(0,0,0,0.5); display: flex; justify-content: space-between; align-items: center; padding: 0 15px; color: white; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .window-controls { display: flex; gap: 10px; }
+        .win-btn { width: 14px; height: 14px; border-radius: 50%; cursor: pointer; border: none; }
+        .btn-red { background: #ff5f56; } .btn-green { background: #27c93f; }
+        .window-content { flex: 1; background: #000; position: relative; display: flex; flex-direction: column; }
+        .window-content iframe { width: 100%; height: 100%; border: none; }
+
+        .music-app { display: flex; flex-direction: column; height: 100%; background: #121212; padding: 20px; overflow-y: auto; }
+        .app-search-bar { padding: 15px; background: #181818; display: flex; gap: 10px; border-bottom: 1px solid #333; }
+        .app-search-bar input { flex: 1; padding: 10px 20px; border-radius: 20px; border: 1px solid #333; background: #000; color: white; outline: none; }
+        .app-search-bar button { padding: 10px 20px; border-radius: 20px; border: none; font-weight: bold; cursor: pointer; }
+        .music-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .music-card { background: #181818; padding: 15px; border-radius: 8px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .music-card:hover { background: #282828; }
+        .music-card img { width: 100%; aspect-ratio: 1; border-radius: 5px; margin-bottom: 10px; }
+        .music-card h4 { font-size: 14px; color: white; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .music-card p { font-size: 12px; color: #b3b3b3; }
+
+        .notes-app { display: flex; flex-direction: column; height: 100%; background: #121212; padding: 20px; }
+        .notes-app textarea { flex: 1; background: #000; color: white; border: 1px solid #333; border-radius: 8px; padding: 20px; outline: none; resize: none; font-size: 16px; line-height: 1.5; }
+
+        .ai-app { display: flex; flex-direction: column; height: 100%; background: #121212; padding: 20px; }
+        .ai-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+        .msg { padding: 12px 18px; border-radius: 12px; max-width: 80%; font-size: 14px; line-height: 1.5; }
+        .msg.user { background: #0078D7; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .msg.bot { background: #2a2a2a; color: white; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .ai-input { display: flex; gap: 10px; }
+        .ai-input input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #000; color: white; outline: none; }
+        .ai-input button { padding: 12px 20px; border-radius: 8px; border: none; background: #8b5cf6; color: white; font-weight: bold; cursor: pointer; }
+
+        .settings-app { padding: 30px; background: #121212; height: 100%; color: white; }
+        .bg-options { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 30px; }
+        .bg-opt { width: 180px; height: 100px; border-radius: 8px; cursor: pointer; border: 2px solid transparent; background-size: cover; background-position: center; }
+        .upload-btn { background: #0078D7; color: white; padding: 12px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        .games-app { padding: 20px; background: #121212; height: 100%; overflow-y: auto; }
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .game-card { background: #1f1f23; border: 1px solid #333; border-radius: 8px; overflow: hidden; cursor: pointer; text-align: center; }
+        .game-card img { width: 100%; height: 120px; object-fit: cover; }
+        .game-card p { padding: 10px; font-weight: bold; font-size: 14px; }
+
+        .dock { height: 70px; background: rgba(30,30,35,0.7); backdrop-filter: blur(25px); margin: 0 auto 20px auto; border-radius: 24px; display: flex; align-items: center; padding: 0 25px; gap: 20px; border: 1px solid rgba(255,255,255,0.15); z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .dock-icon { width: 50px; height: 50px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 24px; color: white; cursor: pointer; transition: 0.2s; }
+        .dock-icon:hover { transform: scale(1.15) translateY(-8px); }
     </style>
 </head>
 <body>
 
-    <div class="navbar" id="navbar">
-        <div class="nav-left">
-            <div class="logo" onclick="window.scrollTo(0,0)">GHOSTFLIX</div>
-            <div class="nav-links">
-                <a class="active">Home</a>
-                <a>Movies</a>
-                <a>TV Shows</a>
-                <a>Anime</a>
-            </div>
+    <div class="top-bar">
+        <div class="top-left">
+            <i class="fas fa-bars icon-btn"></i>
+            <span style="font-weight: 800;">GhostOS</span>
         </div>
-        <div class="nav-right">
-            <i class="fas fa-search"></i>
-            <i class="fas fa-user-circle"></i>
+        <div class="top-right">
+            <i class="fas fa-battery-three-quarters icon-btn" style="color: #27c93f;"></i>
+            <i class="fas fa-wifi icon-btn"></i>
+            <span id="clock">12:00 PM</span>
         </div>
     </div>
 
-    <div class="hero" id="hero-banner">
-        <div class="hero-content">
-            <div class="hero-title" id="hero-title">Loading...</div>
-            <div class="hero-meta">
-                <span class="badge" style="color:#f5c518;">IMDb 8.5</span>
-                <span id="hero-year">2024</span>
-                <span class="badge">4K Ultra HD</span>
-            </div>
-            <div class="hero-desc" id="hero-desc">Loading description...</div>
-            <div class="hero-btns">
-                <button class="btn btn-play" id="hero-play-btn"><i class="fas fa-play"></i> Play</button>
-                <button class="btn btn-info"><i class="fas fa-info-circle"></i> More Info</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="row-title">Trending Now</div>
-        <div class="slider" id="trending-row"></div>
-    </div>
-
-    <div class="row">
-        <div class="row-title">Popular Movies</div>
-        <div class="slider" id="movies-row"></div>
-    </div>
-
-    <!-- Premium Player Modal -->
-    <div class="modal" id="player-modal">
-        <button class="close-modal" onclick="closePlayer()"><i class="fas fa-times"></i></button>
+    <div class="desktop">
+        <div class="app-icon" onclick="window.open('https://triplet.getfounddsos.net', '_blank')"><div class="icon-box bg-movies"><i class="fas fa-film"></i></div><span>Movies</span></div>
         
-        <div class="player-wrapper">
-            <div class="video-area">
-                <div class="spinner" id="player-spin"></div>
-                <iframe id="player-iframe" allowfullscreen></iframe>
+        <div class="app-icon" onclick="openApp('music')"><div class="icon-box bg-music"><i class="fas fa-music"></i></div><span>Music</span></div>
+        <div class="app-icon" onclick="openApp('games')"><div class="icon-box bg-games"><i class="fas fa-gamepad"></i></div><span>Games</span></div>
+        <div class="app-icon" onclick="openApp('notes')"><div class="icon-box bg-notes"><i class="fas fa-sticky-note"></i></div><span>Notepad</span></div>
+        <div class="app-icon" onclick="openApp('ai')"><div class="icon-box bg-ai"><i class="fas fa-robot"></i></div><span>AI Chat</span></div>
+        <div class="app-icon" onclick="openApp('settings')"><div class="icon-box bg-settings"><i class="fas fa-cog"></i></div><span>Settings</span></div>
+
+        <!-- Music App -->
+        <div class="window" id="window-music">
+            <div class="window-header"><span>Music</span><div class="window-controls"><button class="win-btn btn-green" onclick="fullscreen('music')"></button><button class="win-btn btn-red" onclick="closeApp('music')"></button></div></div>
+            <div class="window-content music-app">
+                <div class="app-search-bar" style="padding:0; border:none; margin-bottom:20px; background:transparent;">
+                    <input type="text" id="music-search" placeholder="Search songs..." onkeypress="if(event.key === 'Enter') searchMusic()" style="background:#2a2a2a;">
+                    <button style="background:#1db954; color:black;" onclick="searchMusic()">Search</button>
+                </div>
+                <div class="music-grid" id="music-grid"></div>
+                <audio id="music-audio" controls style="width:100%; margin-top:20px; display:none;"></audio>
             </div>
-            
-            <!-- Server Sidebar -->
-            <div class="server-panel">
-                <div class="server-header">
-                    <span>QUALITY</span>
-                    <span>SERVER</span>
-                </div>
-                <div style="font-size:12px; color:#888; margin-bottom:15px;" id="server-message">Finding the best server for you...</div>
-                
-                <div class="server-option active" id="srv-1" onclick="selectServer(1)">
-                    <div class="server-name"><span class="flag">🇺🇸</span> Miami (TripleT)</div>
-                    <div class="server-status" id="status-1">⏳</div>
-                </div>
-                <div class="server-option" id="srv-2" onclick="selectServer(2)">
-                    <div class="server-name"><span class="flag">🇺🇸</span> Bolse (Backup)</div>
-                    <div class="server-status" id="status-2">⏳</div>
+        </div>
+
+        <!-- Notes App -->
+        <div class="window" id="window-notes">
+            <div class="window-header"><span>Notepad</span><div class="window-controls"><button class="win-btn btn-green" onclick="fullscreen('notes')"></button><button class="win-btn btn-red" onclick="closeApp('notes')"></button></div></div>
+            <div class="window-content notes-app">
+                <textarea id="notes-area" placeholder="Type your notes here... (Saves automatically)" oninput="saveNotes()"></textarea>
+            </div>
+        </div>
+
+        <!-- Games App -->
+        <div class="window" id="window-games">
+            <div class="window-header"><span>Games</span><div class="window-controls"><button class="win-btn btn-green" onclick="fullscreen('games')"></button><button class="win-btn btn-red" onclick="closeApp('games')"></button></div></div>
+            <div class="window-content games-app">
+                <div class="games-grid">
+                    <div class="game-card" onclick="playGame('https://www.crazygames.com/embed/retro-bowl')"><img src="https://imgs.crazygames.com/retro-bowl_16x9/20220106142828/retro-bowl_16x9-cover"><p>Retro Bowl</p></div>
+                    <div class="game-card" onclick="playGame('https://www.crazygames.com/embed/slope')"><img src="https://imgs.crazygames.com/slope_16x9/20210804113951/slope_16x9-cover"><p>Slope</p></div>
+                    <div class="game-card" onclick="playGame('https://www.crazygames.com/embed/tunnel-rush')"><img src="https://imgs.crazygames.com/tunnel-rush_16x9/20210212082734/tunnel-rush_16x9-cover"><p>Tunnel Rush</p></div>
+                    <div class="game-card" onclick="playGame('https://play2048.co/')"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/2048_logo.svg/1200px-2048_logo.svg.png" style="object-fit:contain; background:#faf8ef;"><p>2048</p></div>
                 </div>
             </div>
         </div>
+
+        <!-- AI Chat -->
+        <div class="window" id="window-ai">
+            <div class="window-header"><span>Ghost AI</span><div class="window-controls"><button class="win-btn btn-green" onclick="fullscreen('ai')"></button><button class="win-btn btn-red" onclick="closeApp('ai')"></button></div></div>
+            <div class="window-content ai-app">
+                <div class="ai-messages" id="ai-messages"><div class="msg bot">Hello! I am Ghost AI.</div></div>
+                <div class="ai-input"><input type="text" id="ai-input" placeholder="Type a message..." onkeypress="if(event.key === 'Enter') sendAI()"><button onclick="sendAI()">Send</button></div>
+            </div>
+        </div>
+
+        <!-- Settings -->
+        <div class="window" id="window-settings">
+            <div class="window-header"><span>Settings</span><div class="window-controls"><button class="win-btn btn-green" onclick="fullscreen('settings')"></button><button class="win-btn btn-red" onclick="closeApp('settings')"></button></div></div>
+            <div class="window-content settings-app">
+                <h2>Wallpaper</h2>
+                <div class="bg-options">
+                    <div class="bg-opt" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=500');" onclick="setBG('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000')"></div>
+                    <div class="bg-opt" style="background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=500');" onclick="setBG('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2000')"></div>
+                </div>
+                <h2>Custom Wallpaper</h2>
+                <input type="file" id="bg-upload" class="upload-btn" accept="image/*" onchange="uploadBG(event)">
+            </div>
+        </div>
+
+        <!-- Game Player Modal -->
+        <div class="window" id="window-game-player" style="width: 80%; height: 80%; left: 10%; top: 10%;">
+            <div class="window-header"><span id="game-title">Game</span><div class="window-controls"><button class="win-btn btn-green" onclick="fullscreen('game-iframe')"></button><button class="win-btn btn-red" onclick="closeApp('game-player')"></button></div></div>
+            <div class="window-content"><iframe id="game-iframe" src="" allowfullscreen></iframe></div>
+        </div>
+
+    </div>
+
+    <div class="dock">
+        <div class="dock-icon bg-movies" onclick="window.open('https://triplet.getfounddsos.net', '_blank')"><i class="fas fa-film"></i></div>
+        <div class="dock-icon bg-music" onclick="openApp('music')"><i class="fas fa-music"></i></div>
+        <div class="dock-icon bg-games" onclick="openApp('games')"><i class="fas fa-gamepad"></i></div>
+        <div class="dock-icon bg-notes" onclick="openApp('notes')"><i class="fas fa-sticky-note"></i></div>
+        <div class="dock-icon bg-ai" onclick="openApp('ai')"><i class="fas fa-robot"></i></div>
+        <div class="dock-icon bg-settings" onclick="openApp('settings')"><i class="fas fa-cog"></i></div>
     </div>
 
     <script>
-        const TMDB_KEY = '04c35731a5ee918f014970082a0088b1';
-        let currentMovieId = null;
+        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); }, 1000);
 
-        window.onscroll = function() {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) nav.style.background = '#0f0f0f';
-            else nav.style.background = 'linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, transparent 100%)';
+        function openApp(appName) {
+            document.querySelectorAll('.window').forEach(w => w.classList.remove('active'));
+            document.getElementById(`window-${appName}`).classList.add('active');
+        }
+
+        function closeApp(appName) {
+            document.getElementById(`window-${appName}`).classList.remove('active');
+            if(appName === 'music') document.getElementById('music-audio').pause();
+            if(appName === 'game-player') document.getElementById('game-iframe').src = '';
+        }
+
+        function fullscreen(id) {
+            const element = document.getElementById(`iframe-${id}`) || document.getElementById(`window-${id}`);
+            if (element.requestFullscreen) { element.requestFullscreen(); } 
+            else if (element.webkitRequestFullscreen) { element.webkitRequestFullscreen(); }
+        }
+
+        function setBG(url) { document.body.style.backgroundImage = `url('${url}')`; }
+
+        function uploadBG(event) {
+            const file = event.target.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => { setBG(e.target.result); };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function playGame(url) {
+            document.getElementById('game-iframe').src = url;
+            document.getElementById('game-title').innerText = "Playing Game...";
+            openApp('game-player');
+        }
+
+        async function searchMusic() {
+            const q = document.getElementById('music-search').value;
+            if(!q) return;
+            const grid = document.getElementById('music-grid');
+            grid.innerHTML = '<div style="color:white;">Searching...</div>';
+            try {
+                const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=song&limit=18`);
+                const data = await res.json();
+                grid.innerHTML = '';
+                data.results.forEach(i => {
+                    const div = document.createElement('div');
+                    div.className = 'music-card';
+                    div.innerHTML = `<img src="${i.artworkUrl100.replace('100x100', '300x300')}"><h4>${i.trackName}</h4><p>${i.artistName}</p>`;
+                    div.onclick = () => {
+                        const audio = document.getElementById('music-audio');
+                        audio.src = i.previewUrl;
+                        audio.style.display = 'block';
+                        audio.play();
+                    };
+                    grid.appendChild(div);
+                });
+            } catch(e) { grid.innerHTML = '<div style="color:red;">API Blocked.</div>'; }
+        }
+
+        function saveNotes() {
+            localStorage.setItem('ghostNotes', document.getElementById('notes-area').value);
+        }
+        window.onload = () => {
+            const saved = localStorage.getItem('ghostNotes');
+            if(saved) document.getElementById('notes-area').value = saved;
         };
 
-        async function fetchMovies() {
+        async function sendAI() {
+            const input = document.getElementById('ai-input').value;
+            if(!input) return;
+            const chat = document.getElementById('ai-messages');
+            chat.innerHTML += `<div class="msg user">${input}</div>`;
+            document.getElementById('ai-input').value = '';
+            chat.scrollTop = chat.scrollHeight;
             try {
-                const trendRes = await fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${TMDB_KEY}`);
-                const trendData = await trendRes.json();
-                const popRes = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_KEY}`);
-                const popData = await popRes.json();
-
-                if (trendData.results.length > 0) {
-                    const heroMovie = trendData.results[0];
-                    document.getElementById('hero-title').innerText = heroMovie.title;
-                    document.getElementById('hero-desc').innerText = heroMovie.overview;
-                    document.getElementById('hero-year').innerText = heroMovie.release_date.split('-')[0];
-                    document.getElementById('hero-banner').style.backgroundImage = `url(https://image.tmdb.org/t/p/original${heroMovie.backdrop_path})`;
-                    document.getElementById('hero-play-btn').onclick = () => openPlayer(heroMovie.id);
-                }
-
-                renderRow(trendData.results, 'trending-row');
-                renderRow(popData.results, 'movies-row');
-
-            } catch (e) { console.error("API Failed", e); }
+                const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(input)}`);
+                const text = await res.text();
+                chat.innerHTML += `<div class="msg bot">${text}</div>`;
+                chat.scrollTop = chat.scrollHeight;
+            } catch (e) { chat.innerHTML += `<div class="msg bot">Connection error.</div>`; }
         }
-
-        function renderRow(movies, containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            movies.forEach(movie => {
-                if(!movie.poster_path) return;
-                const card = document.createElement('div');
-                card.className = 'movie-card';
-                card.innerHTML = `
-                    <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
-                    <div class="movie-info"><div class="movie-title">${movie.title}</div></div>
-                `;
-                card.onclick = () => openPlayer(movie.id);
-                container.appendChild(card);
-            });
-        }
-
-        // --- THE TRIPLET INTEGRATION ---
-        function openPlayer(movieId) {
-            currentMovieId = movieId;
-            document.getElementById('player-modal').classList.add('active');
-            
-            document.querySelectorAll('.server-status').forEach(el => el.innerHTML = '⏳');
-            selectServer(1);
-        }
-
-        function closePlayer() {
-            document.getElementById('player-modal').classList.remove('active');
-            document.getElementById('player-iframe').src = '';
-        }
-
-        function selectServer(num) {
-            document.querySelectorAll('.server-option').forEach(el => el.classList.remove('active'));
-            document.getElementById(`srv-${num}`).classList.add('active');
-            
-            const iframe = document.getElementById('player-iframe');
-            const spinner = document.getElementById('player-spin');
-            spinner.style.display = 'block';
-            iframe.style.display = 'none';
-
-            let url = '';
-            if(num === 1) {
-                // Embedding the TripleT player directly
-                url = `https://triplet.getfounddsos.net/embed/movie/${currentMovieId}`;
-            } else if(num === 2) {
-                // Backup server
-                url = `https://vidsrc.xyz/embed/movie/${currentMovieId}`;
-            }
-
-            iframe.src = url;
-
-            iframe.onload = () => {
-                spinner.style.display = 'none';
-                iframe.style.display = 'block';
-                document.getElementById(`status-${num}`).innerHTML = '<span class="status-ok">●</span>';
-                document.getElementById('server-message').innerText = "Connected successfully.";
-            };
-
-            // Timeout to check if it's blocked
-            clearTimeout(window.serverTimeout);
-            window.serverTimeout = setTimeout(() => {
-                if(spinner.style.display === 'block') {
-                    document.getElementById(`status-${num}`).innerHTML = '<span class="status-fail">●</span>';
-                    if(num < 2) selectServer(num + 1);
-                    else document.getElementById('server-message').innerText = "All servers blocked.";
-                }
-            }, 4000);
-        }
-
-        fetchMovies();
     </script>
 </body>
 </html>
