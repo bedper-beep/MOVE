@@ -21,9 +21,11 @@
         .window { position: absolute; top: 10%; left: 20%; width: 600px; height: 400px; background: #202020; border: 1px solid #444; border-radius: 8px; display: none; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 100; overflow: hidden; }
         .window.active { display: flex; }
         .window.maximized { top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; border-radius: 0; z-index: 9999 !important; }
-        .window-header { height: 35px; background: #2d2d2d; display: flex; justify-content: space-between; align-items: center; padding: 0 10px; cursor: move; position: relative; z-index: 10; }
+        
+        /* FIXED: Window header has a higher z-index so buttons always work */
+        .window-header { height: 35px; background: #2d2d2d; display: flex; justify-content: space-between; align-items: center; padding: 0 10px; cursor: move; position: relative; z-index: 1000; }
         .window-title { color: white; font-size: 12px; display: flex; align-items: center; gap: 8px; pointer-events: none; }
-        .window-controls { display: flex; z-index: 20; }
+        .window-controls { display: flex; z-index: 1001; position: relative; pointer-events: auto; }
         .win-btn { width: 45px; height: 35px; border: none; background: transparent; color: white; cursor: pointer; font-size: 12px; display: flex; justify-content: center; align-items: center; transition: 0.1s; }
         .win-btn:hover { background: #444; }
         .win-btn.close:hover { background: #e81123; }
@@ -44,13 +46,6 @@
         .start-app:hover { background: rgba(255,255,255,0.1); }
         .start-app img { width: 32px; height: 32px; margin-bottom: 10px; }
         .start-app span { font-size: 12px; }
-
-        /* Terminal */
-        .terminal { background: black; color: #00ff00; font-family: 'JetBrains Mono', monospace; padding: 10px; height: 100%; display: flex; flex-direction: column; }
-        .term-output { flex: 1; overflow-y: auto; margin-bottom: 5px; }
-        .term-input-line { display: flex; gap: 5px; }
-        .term-input-line span { color: #00ff00; }
-        .term-input-line input { flex: 1; background: transparent; border: none; color: #00ff00; font-family: 'JetBrains Mono', monospace; outline: none; }
 
         /* App Content */
         .proxy-search iframe { width: 100%; height: 100%; border: none; }
@@ -143,7 +138,7 @@
             </div>
             <div class="window-content app-store">
                 <h2>Featured Apps</h2>
-                <p style="color:#aaa; font-size:12px; margin-bottom:15px;">Clicking these will open them in a new tab to bypass school blocks.</p>
+                <p style="color:#aaa; font-size:12px; margin-bottom:15px;">Installing puts them on the desktop. Opening uses the internal proxy window.</p>
                 <div class="store-grid" id="store-grid"></div>
             </div>
         </div>
@@ -308,8 +303,9 @@
                 renderStore();
                 renderInstalledApps();
             } else {
-                // If the app is installed, open it in a new tab because the school blocks them from loading in iframes
-                window.open(url, '_blank');
+                // Force to open in the dynamic window using a stealth proxy
+                const proxyUrl = `https://12ft.io/proxy?q=${encodeURIComponent(url)}`;
+                playInsideApp(name, proxyUrl);
             }
         }
 
@@ -319,7 +315,11 @@
             installedApps.forEach(app => {
                 const el = document.createElement('div');
                 el.className = 'desktop-icon installed-icon';
-                el.ondblclick = () => window.open(app.url, '_blank');
+                // Also forced to open in the dynamic window
+                el.ondblclick = () => {
+                    const proxyUrl = `https://12ft.io/proxy?q=${encodeURIComponent(app.url)}`;
+                    playInsideApp(app.name, proxyUrl);
+                };
                 el.innerHTML = `<img src="${app.icon}"><span>${app.name}</span>`;
                 desktop.appendChild(el);
             });
@@ -328,7 +328,10 @@
             installedApps.forEach(app => {
                 const el = document.createElement('div');
                 el.className = 'start-app';
-                el.onclick = () => window.open(app.url, '_blank');
+                el.onclick = () => {
+                    const proxyUrl = `https://12ft.io/proxy?q=${encodeURIComponent(app.url)}`;
+                    playInsideApp(app.name, proxyUrl);
+                };
                 el.innerHTML = `<img src="${app.icon}"><span>${app.name}</span>`;
                 startList.appendChild(el);
             });
@@ -342,7 +345,7 @@
             win.document.close();
         }
 
-        // Open Game inside OS
+        // Open Game or App inside the dynamic OS window
         function playInsideApp(title, url) {
             document.getElementById('dynamic-title').innerText = title;
             document.getElementById('dynamic-iframe').src = url;
@@ -366,7 +369,7 @@
             }
         }
 
-        // Window Management (Fixed)
+        // Window Management (Fixed Click Layering)
         function toggleStart() { document.getElementById('start-menu').classList.toggle('active'); }
         function openApp(app) {
             document.getElementById('start-menu').classList.remove('active');
@@ -377,10 +380,10 @@
         function minimizeApp(app) { document.getElementById(`win-${app}`).classList.remove('active'); }
         function maximizeApp(app) { document.getElementById(`win-${app}`).classList.toggle('maximized'); }
 
-        // Drag Logic
+        // Drag Logic (Ignores Buttons completely)
         let activeWindow = null, offsetX = 0, offsetY = 0;
         function startDrag(e, id) {
-            if(e.target.tagName === 'BUTTON' || e.target.tagName === 'I') return;
+            if(e.target.tagName === 'BUTTON' || e.target.tagName === 'I' || e.target.closest('.window-controls')) return;
             activeWindow = document.getElementById(id);
             activeWindow.style.zIndex = 1000;
             offsetX = e.clientX - activeWindow.getBoundingClientRect().left;
