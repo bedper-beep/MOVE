@@ -9,30 +9,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600&family=JetBrains+Mono&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
         
-        /* Login Screen */
         body { font-family: 'Segoe UI', sans-serif; background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop') no-repeat center center fixed; background-size: cover; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        .login-screen { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999; transition: opacity 0.5s; }
-        .login-screen.hidden { opacity: 0; pointer-events: none; }
-        .login-avatar { width: 100px; height: 100px; border-radius: 50%; background: #333; display: flex; justify-content: center; align-items: center; font-size: 40px; color: #aaa; margin-bottom: 20px; }
-        .login-name { font-size: 24px; color: white; margin-bottom: 20px; font-weight: 600; }
-        
-        .login-input-group { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .login-input { padding: 10px 20px; border-radius: 20px; border: 1px solid #555; background: rgba(0,0,0,0.5); color: white; text-align: center; outline: none; font-size: 16px; width: 250px; transition: 0.3s; }
-        .login-btn { padding: 10px 30px; border-radius: 20px; border: none; background: #0078D7; color: white; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s; width: 250px; }
-        .login-btn.guest { background: #444; }
-        .login-btn:hover { opacity: 0.8; }
-        
-        .skip-btn { position: absolute; bottom: 20px; right: 20px; background: transparent; color: #aaa; border: 1px solid #aaa; padding: 5px 15px; border-radius: 15px; cursor: pointer; font-size: 12px; z-index: 100000; }
-
-        /* Shake Animation */
-        @keyframes shake {
-            0% { transform: translateX(0); border-color: #ff3333; background: rgba(255,51,51,0.2); }
-            25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-10px); }
-            100% { transform: translateX(0); border-color: #555; background: rgba(0,0,0,0.5); }
-        }
-        .shake { animation: shake 0.4s ease-in-out; }
 
         /* Desktop */
         .desktop { flex: 1; position: relative; padding: 20px; display: flex; flex-direction: column; gap: 15px; align-items: flex-start; flex-wrap: wrap; height: calc(100vh - 50px); align-content: flex-start; }
@@ -114,18 +91,6 @@
 </head>
 <body>
 
-    <!-- Login Screen -->
-    <div class="login-screen" id="login-screen">
-        <div class="login-avatar"><i class="fas fa-user"></i></div>
-        <div class="login-name" id="profile-name-display">Chief</div>
-        <div class="login-input-group">
-            <input type="password" class="login-input" id="login-pass" placeholder="Password (Default: 1234)" onkeypress="if(event.key === 'Enter') login()">
-            <button class="login-btn" onclick="login()">Sign In</button>
-            <button class="login-btn guest" onclick="loginGuest()">Sign in as Guest</button>
-        </div>
-        <button class="skip-btn" onclick="loginGuest()">Skip Login ⏭</button>
-    </div>
-
     <div class="desktop" id="desktop">
         <div class="desktop-icon" ondblclick="openApp('terminal')"><img src="https://cdn-icons-png.flaticon.com/512/919/919831.png"><span>Terminal</span></div>
         <div class="desktop-icon" ondblclick="openApp('store')"><img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png"><span>App Store</span></div>
@@ -158,12 +123,15 @@
             <div class="window-content app-store"><h2>Featured Apps</h2><div class="store-grid" id="store-grid"></div></div>
         </div>
 
+        <!-- NEW BROWSER PROXY -->
         <div class="window" id="win-search" style="width: 800px; height: 500px;">
             <div class="window-header" onmousedown="startDrag(event, 'win-search')">
-                <div class="window-title"><i class="fas fa-globe"></i> Proxy Browser</div>
+                <div class="window-title"><i class="fas fa-globe"></i> 12ft Browser Proxy</div>
                 <div class="window-controls"><button class="win-btn" onclick="maximizeApp('win-search')"><i class="far fa-window-maximize"></i></button><button class="win-btn" onclick="minimizeApp('win-search')"><i class="fas fa-minus"></i></button><button class="win-btn close" onclick="closeApp('win-search')"><i class="fas fa-times"></i></button></div>
             </div>
-            <div class="window-content proxy-search"><iframe src="https://search.marginalia.nu/" allowfullscreen></iframe></div>
+            <div class="window-content proxy-search">
+                <iframe src="https://12ft.io/" allowfullscreen></iframe>
+            </div>
         </div>
 
         <div class="window" id="win-games" style="width: 700px; height: 500px;">
@@ -209,7 +177,6 @@
             <div class="window-content settings-app">
                 <div class="settings-nav">
                     <div class="active" onclick="switchSettings('personalization', this)">Personalization</div>
-                    <div onclick="switchSettings('system', this)">System</div>
                 </div>
                 <div class="settings-content" id="settings-personalization">
                     <h3>Change Wallpaper</h3>
@@ -217,14 +184,6 @@
                         <div style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=300');" onclick="setBG('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000')"></div>
                         <div style="background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=300');" onclick="setBG('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2000')"></div>
                     </div>
-                </div>
-                <div class="settings-content" id="settings-system" style="display:none;">
-                    <h3>System Settings</h3>
-                    <label style="font-size:12px; color:#ccc;">Profile Name:</label><br>
-                    <input type="text" id="new-name-input" placeholder="Change Name" style="padding:10px; border-radius:5px; border:1px solid #444; background:#111; color:white; margin-bottom:15px; width:100%;">
-                    <label style="font-size:12px; color:#ccc;">Current Password: <span id="current-pass-display">1234</span></label><br>
-                    <input type="password" id="new-pass-input" placeholder="New Password" style="padding:10px; border-radius:5px; border:1px solid #444; background:#111; color:white; margin-bottom:10px; width:100%;">
-                    <button onclick="saveSystemSettings()" style="padding:10px 20px; border-radius:5px; border:none; background:#0078D7; color:white; cursor:pointer; font-weight:bold;">Save Changes</button>
                 </div>
             </div>
         </div>
@@ -246,54 +205,6 @@
     </div>
 
     <script>
-        let systemPassword = localStorage.getItem('systemPass') || '1234';
-        let systemName = localStorage.getItem('systemName') || 'Chief';
-        
-        document.getElementById('current-pass-display').innerText = systemPassword;
-        document.getElementById('profile-name-display').innerText = systemName;
-
-        function login() {
-            const input = document.getElementById('login-pass').value;
-            if(input === systemPassword) {
-                document.getElementById('login-screen').classList.add('hidden');
-                new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3').play();
-            } else {
-                const passInput = document.getElementById('login-pass');
-                passInput.classList.add('shake');
-                setTimeout(() => passInput.classList.remove('shake'), 400);
-            }
-        }
-
-        function loginGuest() {
-            document.getElementById('login-screen').classList.add('hidden');
-            new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3').play();
-        }
-
-        function saveSystemSettings() {
-            const newPass = document.getElementById('new-pass-input').value;
-            const newName = document.getElementById('new-name-input').value;
-            if(newPass.length > 0) {
-                systemPassword = newPass;
-                localStorage.setItem('systemPass', systemPassword);
-                document.getElementById('current-pass-display').innerText = systemPassword;
-                document.getElementById('new-pass-input').value = '';
-            }
-            if(newName.length > 0) {
-                systemName = newName;
-                localStorage.setItem('systemName', systemName);
-                document.getElementById('profile-name-display').innerText = systemName;
-                document.getElementById('new-name-input').value = '';
-            }
-            alert("System settings saved!");
-        }
-
-        function switchSettings(tab, el) {
-            document.getElementById('settings-personalization').style.display = tab === 'personalization' ? 'block' : 'none';
-            document.getElementById('settings-system').style.display = tab === 'system' ? 'block' : 'none';
-            document.querySelectorAll('.settings-nav div').forEach(d => d.classList.remove('active'));
-            el.classList.add('active');
-        }
-
         const storeApps = [
             { name: "TikTok", icon: "https://cdn-icons-png.flaticon.com/512/3046/3046121.png", url: "https://www.tiktok.com" },
             { name: "YouTube", icon: "https://cdn-icons-png.flaticon.com/512/1384/1384060.png", url: "https://www.youtube.com" }
@@ -320,7 +231,8 @@
                 renderStore();
                 renderInstalledApps();
             } else {
-                const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
+                // Using 12ft proxy to bypass Linewize
+                const proxyUrl = `https://12ft.io/proxy?q=${encodeURIComponent(url)}`;
                 playInsideApp(name, proxyUrl);
             }
         }
@@ -332,7 +244,7 @@
                 const el = document.createElement('div');
                 el.className = 'desktop-icon installed-icon';
                 el.ondblclick = () => {
-                    const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(app.url)}`;
+                    const proxyUrl = `https://12ft.io/proxy?q=${encodeURIComponent(app.url)}`;
                     playInsideApp(app.name, proxyUrl);
                 };
                 el.innerHTML = `<img src="${app.icon}"><span>${app.name}</span>`;
@@ -400,3 +312,10 @@
         function uploadBG(event) {
             const file = event.target.files[0];
             if(file) { const reader = new FileReader(); reader.onload = (e) => { setBG(e.target.result); }; reader.readAsDataURL(file); }
+        }
+
+        renderStore();
+        renderInstalledApps();
+    </script>
+</body>
+</html>
