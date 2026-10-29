@@ -15,9 +15,22 @@
         .login-screen.hidden { opacity: 0; pointer-events: none; }
         .login-avatar { width: 100px; height: 100px; border-radius: 50%; background: #333; display: flex; justify-content: center; align-items: center; font-size: 40px; color: #aaa; margin-bottom: 20px; }
         .login-name { font-size: 24px; color: white; margin-bottom: 20px; font-weight: 600; }
-        .login-input { padding: 10px 20px; border-radius: 20px; border: 1px solid #555; background: rgba(0,0,0,0.5); color: white; text-align: center; outline: none; font-size: 16px; margin-bottom: 10px; width: 250px; }
-        .login-btn { padding: 10px 30px; border-radius: 20px; border: none; background: #0078D7; color: white; font-weight: bold; cursor: pointer; font-size: 14px; }
+        
+        .login-input-group { display: flex; flex-direction: column; align-items: center; }
+        .login-input { padding: 10px 20px; border-radius: 20px; border: 1px solid #555; background: rgba(0,0,0,0.5); color: white; text-align: center; outline: none; font-size: 16px; margin-bottom: 10px; width: 250px; transition: 0.3s; }
+        .login-btn { padding: 10px 30px; border-radius: 20px; border: none; background: #0078D7; color: white; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s; }
+        .login-btn:hover { background: #0063b1; }
         .login-msg { color: #ff3333; margin-top: 10px; font-size: 13px; height: 15px; }
+
+        /* Shake Animation */
+        @keyframes shake {
+            0% { transform: translateX(0); border-color: #ff3333; background: rgba(255,51,51,0.2); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); border-color: #555; background: rgba(0,0,0,0.5); }
+        }
+        .shake { animation: shake 0.4s ease-in-out; }
 
         /* Desktop */
         .desktop { flex: 1; position: relative; padding: 20px; display: flex; flex-direction: column; gap: 15px; align-items: flex-start; flex-wrap: wrap; height: calc(100vh - 50px); align-content: flex-start; }
@@ -106,10 +119,12 @@
     <!-- Login Screen -->
     <div class="login-screen" id="login-screen">
         <div class="login-avatar"><i class="fas fa-user"></i></div>
-        <div class="login-name">Chief</div>
-        <input type="password" class="login-input" id="login-pass" placeholder="Enter Password" onkeypress="if(event.key === 'Enter') login()">
-        <button class="login-btn" onclick="login()">Sign In</button>
-        <div class="login-msg" id="login-msg"></div>
+        <div class="login-name" id="profile-name-display">Chief</div>
+        <div class="login-input-group">
+            <input type="password" class="login-input" id="login-pass" placeholder="Enter Password" onkeypress="if(event.key === 'Enter') login()">
+            <button class="login-btn" onclick="login()">Sign In</button>
+            <div class="login-msg" id="login-msg"></div>
+        </div>
     </div>
 
     <div class="desktop" id="desktop">
@@ -259,8 +274,8 @@
             </div>
             <div class="window-content settings-app">
                 <div class="settings-nav">
-                    <div class="active" onclick="switchSettings('personalization')">Personalization</div>
-                    <div onclick="switchSettings('system')">System</div>
+                    <div class="active" onclick="switchSettings('personalization', this)">Personalization</div>
+                    <div onclick="switchSettings('system', this)">System</div>
                 </div>
                 <div class="settings-content" id="settings-personalization">
                     <h3>Change Wallpaper</h3>
@@ -274,10 +289,16 @@
                     </div>
                 </div>
                 <div class="settings-content" id="settings-system" style="display:none;">
-                    <h3>Change Password</h3>
-                    <p style="font-size:12px; color:#aaa; margin-bottom:10px;">Current password: <span id="current-pass-display">1234</span></p>
+                    <h3>System Settings</h3>
+                    <p style="font-size:12px; color:#aaa; margin-bottom:10px;">Update your password and profile.</p>
+                    
+                    <label style="font-size:12px; color:#ccc;">Profile Name:</label><br>
+                    <input type="text" id="new-name-input" placeholder="Change Name" style="padding:10px; border-radius:5px; border:1px solid #444; background:#111; color:white; margin-bottom:15px; width:100%;">
+                    
+                    <label style="font-size:12px; color:#ccc;">Current Password: <span id="current-pass-display">1234</span></label><br>
                     <input type="password" id="new-pass-input" placeholder="New Password" style="padding:10px; border-radius:5px; border:1px solid #444; background:#111; color:white; margin-bottom:10px; width:100%;">
-                    <button onclick="changePassword()" style="padding:10px 20px; border-radius:5px; border:none; background:#0078D7; color:white; cursor:pointer; font-weight:bold;">Update Password</button>
+                    
+                    <button onclick="saveSystemSettings()" style="padding:10px 20px; border-radius:5px; border:none; background:#0078D7; color:white; cursor:pointer; font-weight:bold;">Save Changes</button>
                 </div>
             </div>
         </div>
@@ -303,37 +324,54 @@
     <script>
         // --- LOGIN SYSTEM ---
         let systemPassword = localStorage.getItem('systemPass') || '1234';
+        let systemName = localStorage.getItem('systemName') || 'Chief';
+        
+        // Initialize UI
         document.getElementById('current-pass-display').innerText = systemPassword;
+        document.getElementById('profile-name-display').innerText = systemName;
 
         function login() {
             const input = document.getElementById('login-pass').value;
             if(input === systemPassword) {
                 document.getElementById('login-screen').classList.add('hidden');
-                // Play login sound
                 const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
                 audio.play();
             } else {
+                const passInput = document.getElementById('login-pass');
+                passInput.classList.add('shake');
                 document.getElementById('login-msg').innerText = "Incorrect password.";
-                document.getElementById('login-pass').value = '';
+                setTimeout(() => {
+                    passInput.classList.remove('shake');
+                    document.getElementById('login-msg').innerText = "";
+                    passInput.value = '';
+                }, 1000);
             }
         }
 
-        function changePassword() {
+        function saveSystemSettings() {
             const newPass = document.getElementById('new-pass-input').value;
+            const newName = document.getElementById('new-name-input').value;
+            
             if(newPass.length > 0) {
                 systemPassword = newPass;
                 localStorage.setItem('systemPass', systemPassword);
                 document.getElementById('current-pass-display').innerText = systemPassword;
                 document.getElementById('new-pass-input').value = '';
-                alert("Password updated!");
             }
+            if(newName.length > 0) {
+                systemName = newName;
+                localStorage.setItem('systemName', systemName);
+                document.getElementById('profile-name-display').innerText = systemName;
+                document.getElementById('new-name-input').value = '';
+            }
+            alert("System settings saved!");
         }
 
-        function switchSettings(tab) {
+        function switchSettings(tab, el) {
             document.getElementById('settings-personalization').style.display = tab === 'personalization' ? 'block' : 'none';
             document.getElementById('settings-system').style.display = tab === 'system' ? 'block' : 'none';
-            document.querySelectorAll('.settings-nav div').forEach(el => el.classList.remove('active'));
-            event.target.classList.add('active');
+            document.querySelectorAll('.settings-nav div').forEach(d => d.classList.remove('active'));
+            el.classList.add('active');
         }
 
         // --- APP STORE ---
@@ -366,7 +404,7 @@
                 renderStore();
                 renderInstalledApps();
             } else {
-                // Use Vercel's edge proxy to bypass school blocks
+                // Use Codetabs proxy
                 const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`;
                 playInsideApp(name, proxyUrl);
             }
@@ -394,42 +432,3 @@
                     const proxyUrl = `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(app.url)}`;
                     playInsideApp(app.name, proxyUrl);
                 };
-                el.innerHTML = `<img src="${app.icon}"><span>${app.name}</span>`;
-                startList.appendChild(el);
-            });
-        }
-
-        function runCode() {
-            const code = document.getElementById('vs-code-area').value;
-            const win = window.open('', '_blank');
-            win.document.write(code);
-            win.document.close();
-        }
-
-        function playInsideApp(title, url) {
-            document.getElementById('dynamic-title').innerText = title;
-            document.getElementById('dynamic-iframe').src = url;
-            openApp('dynamic');
-        }
-
-        // --- TERMINAL ---
-        function handleTerm(e) {
-            if(e.key === 'Enter') {
-                const input = document.getElementById('term-input').value;
-                const output = document.getElementById('term-output');
-                output.innerHTML += `<br>C:\\Users\\Chief> ${input}<br>`;
-                if(input === 'help') output.innerHTML += `Commands: help, clear, date, echo, open [app]`;
-                else if(input === 'clear') output.innerHTML = '';
-                else if(input === 'date') output.innerHTML += new Date().toString();
-                else if(input.startsWith('echo ')) output.innerHTML += input.substring(5);
-                else if(input.startsWith('open ')) openApp(input.substring(5));
-                else if(input !== '') output.innerHTML += `'${input}' is not recognized...`;
-                document.getElementById('term-input').value = '';
-                output.scrollTop = output.scrollHeight;
-            }
-        }
-
-        // --- WINDOW MANAGEMENT (WITH DRAG-TO-DELETE) ---
-        function toggleStart() { document.getElementById('start-menu').classList.toggle('active'); }
-        function openApp(app) {
-            document.getElementById('start-menu').classList.remove('active');
